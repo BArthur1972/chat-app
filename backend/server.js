@@ -19,4 +19,4 @@ const io = require('socket.io')(server, {
 
 server.listen(PORT, () => {
     console.log('listening to port', PORT)
-})
+});

@@ -87,7 +87,7 @@ function Signup() {
 							<Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
 						</Form.Group>
 
-						<Button variant="primary" type="submit" onSubmit={(e) => handleSignup(e)}>
+						<Button variant="primary" type="submit">
 							{uploadingImage ? "Signing You Up..." : "Sign Up"}
 						</Button>
 						<div className="py-4">

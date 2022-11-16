@@ -3,19 +3,19 @@ import { ListGroup } from "react-bootstrap";
 import "./Sidebar.css";
 
 function Sidebar() {
-  const rooms = ["first room", "second room", "third room"];
+	const rooms = ["first room", "second room", "third room"];
 
-  return (
-    <>
-      <h2>Available rooms</h2>
-      <ListGroup>
-        {rooms.map((room, idx) => (
-          <ListGroup.Item key={idx}>{room}</ListGroup.Item>
-        ))}
-      </ListGroup>
-      <h2>Members</h2>
-    </>
-  );
+	return (
+		<>
+			<h2>Available rooms</h2>
+			<ListGroup>
+				{rooms.map((room, idx) => (
+					<ListGroup.Item key={idx}>{room}</ListGroup.Item>
+				))}
+			</ListGroup>
+			<h2>Members</h2>
+		</>
+	);
 }
 
 export default Sidebar;

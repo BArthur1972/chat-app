@@ -1,20 +1,30 @@
-const express  = require('express');
+const express = require('express');
 const app = express();
-
-const channels = ['general', 'tech', 'finance', 'crypto'];
+const User = require('./models/User');
+const Message = require('./models/Message');
+const userRoutes = require('./routes/userRoutes');
 const cors = require('cors');
 
-app.use(express.urlencoded({extended: true}));
+const channels = ['general', 'tech', 'finance', 'crypto'];
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-const server = require('https').createServer(app);
+app.use('/users', userRoutes);
+require('./connection');
+
+const server = require('http').createServer(app);
 const PORT = 5001;
 const io = require('socket.io')(server, {
     cors: {
-        origin: 'https://localhost:3000',
+        origin: 'http://localhost:3000',
         methods: ['GET', 'POST']
     }
+});
+
+app.get('/', (req, res) => {
+    res.send("Welcome to the Chat App");
 });
 
 server.listen(PORT, () => {

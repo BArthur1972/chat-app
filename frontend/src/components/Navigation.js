@@ -1,13 +1,16 @@
 import React from "react";
 import { Nav, Navbar, Container, Button, NavDropdown } from "react-bootstrap";
-import { useLogoutUserMutation } from "../services/appApi";
+import { useDeleteUserMutation, useLogoutUserMutation } from "../services/appApi";
 import { useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import logo from "../assets/logo.png";
+import ProfileImage from "./ProfileImage";
+
 function Navigation() {
     const user = useSelector((state) => state.user);
     const [logoutUser] = useLogoutUserMutation();
-    
+    const [deleteUser] = useDeleteUserMutation();
+
     // Logout a user 
     async function handleLogout(e) {
         e.preventDefault();
@@ -16,7 +19,17 @@ function Navigation() {
         // navigate to the home page
         window.location.replace("/");
     }
-    
+
+    // Delete a users account
+    async function handleDeleteAccount(e) {
+        e.preventDefault();
+
+        await deleteUser(user);
+
+        // navigate to the home page
+        window.location.replace("/");
+    }
+
     return (
         <Navbar bg="light" expand="lg">
             <Container>
@@ -40,16 +53,13 @@ function Navigation() {
                             <NavDropdown
                                 title={
                                     <>
-                                        <img src={user.picture} alt="" style={{ width: 30, height: 30, marginRight: 10, objectFit: "cover", borderRadius: "50%" }} />
+                                        <ProfileImage userObject={user} />
                                         {user.name}
                                     </>
                                 }
                                 id="basic-nav-dropdown"
                             >
-                                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-
+                                <NavDropdown.Item onClick={handleDeleteAccount}>Delete Your Account</NavDropdown.Item>
                                 <NavDropdown.Item>
                                     <Button variant="danger" onClick={handleLogout}>
                                         Logout

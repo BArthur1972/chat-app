@@ -66,7 +66,7 @@ function Sidebar() {
 	}
 	return (
 		<>
-			<h2>Available Channels</h2>
+			<h2 className="sidebar-header">Available Channels</h2>
 			<ListGroup>
 				{channels.map((channel, idx) => (
 					<ListGroup.Item key={idx} onClick={() => joinChannel(channel)} active={channel === currentChannel} style={{ cursor: "pointer", display: "flex", justifyContent: "space-between" }}>
@@ -74,7 +74,7 @@ function Sidebar() {
 					</ListGroup.Item>
 				))}
 			</ListGroup>
-			<h2>Members</h2>
+			<h2 className="sidebar-header">Members</h2>
 			{members.map((member, idx) => (
 				<ListGroup.Item key={idx} style={{ cursor: "pointer" }} active={privateMemberMessage?._id === member?._id} onClick={() => handlePrivateMemberMessage(member)} disabled={member._id === user._id}>
 					<Row>

@@ -21,6 +21,8 @@ function Login() {
                 socket.emit("new-user");
                 // navigate to the chat
                 navigate("/chat");
+            } else {
+                alert("Your username or password is invalid");
             }
         });
     }

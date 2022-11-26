@@ -22,6 +22,7 @@ const io = require('socket.io')(server, {
 	}
 });
 
+// Get request for the messages
 async function getLastMessagesFromChannel(channel) {
 	let channelMessages = await Message.aggregate([
 		{ $match: { to: channel } },
@@ -30,6 +31,7 @@ async function getLastMessagesFromChannel(channel) {
 	return channelMessages;
 }
 
+// Sort messages by most recent.
 function sortChannelMessagesByDate(messages) {
 	return messages.sort(function (a, b) {
 		let date1 = a._id.split('/');
@@ -43,7 +45,6 @@ function sortChannelMessagesByDate(messages) {
 }
 
 // socket connection
-
 io.on('connection', (socket) => {
 
 	socket.on('new-user', async () => {
@@ -59,6 +60,8 @@ io.on('connection', (socket) => {
 		socket.emit('channel-messages', channelMessages);
 	});
 
+	// Post new message
+	// We need to use the socket to notify other users that there is a new message.
 	socket.on('message-channel', async (channel, content, sender, time, date) => {
 		const newMessage = await Message.create({ content, from: sender, time, date, to: room });
 		let channelMessages = await getLastMessagesFromChannel(channel);
@@ -68,6 +71,7 @@ io.on('connection', (socket) => {
 		socket.broadcast.emit('notifications', channel);
 	});
 
+	// Log a user out of the app
 	app.delete('/logout', async (req, res) => {
 		try {
 			const { _id, newMessages } = req.body;
@@ -84,8 +88,22 @@ io.on('connection', (socket) => {
 		}
 	});
 
-});
+	// Delete a users account
+	app.delete('/deleteUser', async (req, res) => {
+		const id = req.body._id;
+		const name = req.body.name;
+		try {
+			await User.findByIdAndDelete(id);
 
+			console.log(`User ${name} has been deleted`);
+			res.status(200).send();
+		} catch (e) {
+			console.log(e);
+			console.log(`Failed to delete user ${name}`);
+			res.status(400).send();
+		}
+	});
+});
 
 app.get('/channels', (req, res) => {
 	res.json(channels);

@@ -3,6 +3,7 @@ import { Col, ListGroup, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { AppContext } from "../context/appContext";
 import { addNotifications, resetNotifications } from "../features/userSlice";
+import ProfileImage from "./ProfileImage";
 import "./Sidebar.css";
 
 function Sidebar() {
@@ -66,7 +67,7 @@ function Sidebar() {
 	}
 	return (
 		<>
-			<h2>Available Channels</h2>
+			<h2 className="sidebar-header">Available Channels</h2>
 			<ListGroup>
 				{channels.map((channel, idx) => (
 					<ListGroup.Item key={idx} onClick={() => joinChannel(channel)} active={channel === currentChannel} style={{ cursor: "pointer", display: "flex", justifyContent: "space-between" }}>
@@ -74,13 +75,12 @@ function Sidebar() {
 					</ListGroup.Item>
 				))}
 			</ListGroup>
-			<h2>Members</h2>
+			<h2 className="sidebar-header">Members</h2>
 			{members.map((member, idx) => (
 				<ListGroup.Item key={idx} style={{ cursor: "pointer" }} active={privateMemberMessage?._id === member?._id} onClick={() => handlePrivateMemberMessage(member)} disabled={member._id === user._id}>
 					<Row>
 						<Col xs={2} className="member-status">
-							<img src={member.picture} alt="" className="member-status-img" />
-							{member.status === "online" ? <i className="fas fa-circle sidebar-online-status"></i> : <i className="fas fa-circle sidebar-offline-status"></i>}
+							<ProfileImage userObject={member} />
 						</Col>
 						<Col xs={9}>
 							{member.name}

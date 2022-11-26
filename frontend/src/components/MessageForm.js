@@ -2,7 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { AppContext } from "../context/appContext";
+import ChatLabel from "./ChatLabel";
 import "./MessageForm.css";
+
 function MessageForm() {
     const [message, setMessage] = useState("");
     const user = useSelector((state) => state.user);
@@ -49,7 +51,7 @@ function MessageForm() {
     return (
         <>
             <div className="messages-output">
-                {user && !privateMemberMessage?._id && <div className="alert alert-info">You are in the {currentChannel} channel</div>}
+                {<ChatLabel userObject={user} privateMemberMsg={privateMemberMessage} currChannel={currentChannel} />}
                 {user && privateMemberMessage?._id && (
                     <>
                         <div className="alert alert-info conversation-info">

@@ -22,7 +22,6 @@ const io = require('socket.io')(server, {
 	}
 });
 
-// Get request for the messages
 async function getLastMessagesFromChannel(channel) {
 	let channelMessages = await Message.aggregate([
 		{ $match: { to: channel } },
@@ -63,7 +62,7 @@ io.on('connection', (socket) => {
 	// Post new message
 	// We need to use the socket to notify other users that there is a new message.
 	socket.on('message-channel', async (channel, content, sender, time, date) => {
-		const newMessage = await Message.create({ content, from: sender, time, date, to: room });
+		const newMessage = await Message.create({ content, from: sender, time, date, to: channel });
 		let channelMessages = await getLastMessagesFromChannel(channel);
 		channelMessages = sortChannelMessagesByDate(channelMessages);
 		// sending a message to a channel
@@ -105,9 +104,21 @@ io.on('connection', (socket) => {
 	});
 });
 
+// Get request for all channels
 app.get('/channels', (req, res) => {
 	res.json(channels);
-})
+});
+
+// Get request for all messages
+app.get("/messages", async (req, res) => {
+	try {
+		let messages = await Message.find();
+		res.status(200).json(messages);
+	} catch(e) {
+		res.status(500).send("Request failed");
+		console.log(e);
+	}
+});
 
 app.get("/", (req, res) => {
 	res.send("Welcome to the Chat App");

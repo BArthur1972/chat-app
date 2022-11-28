@@ -43,7 +43,8 @@ function MessageForm() {
         if (!message) return;
         const today = new Date();
         const minutes = today.getMinutes() < 10 ? "0" + today.getMinutes() : today.getMinutes();
-        const time = today.getHours() + ":" + minutes;
+        const unit = today.getHours() >= 12 ? "PM" : "AM";
+        const time = `${today.getHours()}:${minutes} ${unit}`;
         const roomId = currentChannel;
         socket.emit("message-channel", roomId, message, user, time, todayDate);
         setMessage("");

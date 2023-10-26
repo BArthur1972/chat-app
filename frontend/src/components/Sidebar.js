@@ -31,13 +31,13 @@ function Sidebar() {
 
 	useEffect(() => {
 		if (user) {
-			setCurrentChannel("general");
+			setCurrentChannel("General");
 
 			fetch("http://localhost:5001/channels")
 				.then((res) => res.json())
 				.then((data) => setChannels(data));
 
-			socket.emit("join-channel", "general");
+			socket.emit("join-channel", "General");
 			socket.emit("new-user");
 		}
 
